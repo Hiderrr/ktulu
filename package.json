@@ -1,4 +1,21 @@
 {
+  "name": "discordbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KreconyMakaron/DiscordBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KreconyMakaron/DiscordBot/issues"
+  },
+  "homepage": "https://github.com/KreconyMakaron/DiscordBot#readme",
   "dependencies": {
     "discord.js": "^13.6.0"
   },

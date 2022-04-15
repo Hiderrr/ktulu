@@ -1,10 +1,10 @@
-const config = require('./config');
-
 const { Client, Intents } = require('discord.js');
+const { token } = require('./config.json');
+
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-client.on('ready', () => {
+client.once('ready', () => {
 	console.log(`Running ${client.user.tag}!`);
 });
 
-client.login(config.token);
+client.login(token);
