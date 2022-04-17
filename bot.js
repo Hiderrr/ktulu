@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const { Client, Collection, Intents } = require('discord.js');
-const { token, guildId } = require('./config.json');
+const { guildId, token } = require('./config.json');
 
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
