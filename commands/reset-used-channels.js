@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-// const { Collection } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,11 +11,11 @@ module.exports = {
             usedChannel.setParent(interaction.client.unusedCategory, { lockPermissions: true })
             .catch(err => {
                 console.log(err);
-                return interaction.reply({ content: 'An error occured!', ephemeral: true });
+                return interaction.reply('An error occured!');
             });
         });
 
-        return interaction.reply({ content: 'Done!', ephemeral: true });
+        return interaction.reply('Done!');
 
     },
 };

@@ -9,7 +9,6 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 client.mainKtuluTextName = 'general';
 client.mainKtuluVcName = 'ktulu';
-
 client.usedChannels = new Array();
 client.ktuluVcMembers = new Array();
 
@@ -42,7 +41,7 @@ client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
     if (interaction.channel != client.mainKtuluText) {
-        interaction.reply({ content: `You can only use this command in #${client.mainKtuluTextName}!`, ephemeral: true });
+        interaction.reply(`You can only use this command in #${client.mainKtuluTextName}!`);
         return;
     }
 
@@ -55,7 +54,7 @@ client.on('interactionCreate', async interaction => {
     }
     catch (error) {
 		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		await interaction.reply('There was an error while executing this command!');
         console.log('There was an error executing the command');
 	}
 });
