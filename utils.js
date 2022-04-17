@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const { closestMatch } = require('closest-match');
-const { Collection, GuildChannel, Snowflake } = require('discord.js');
+const { GuildChannel, Interaction } = require('discord.js');
 
 /**
  * @param {string} expectedName
@@ -27,6 +27,28 @@ function closestMatchChannel(name, candidateChannels) {
 
 }
 
+/**
+ * @param {Interaction} interaction
+ * an interaction object passed by an event
+ */
+
+async function resetUsedChannels(interaction) {
+
+    const usedChannels = Array.from(interaction.client.usedCategory.children.values());
+        usedChannels.forEach(usedChannel => {
+            usedChannel.setParent(interaction.client.unusedCategory, { lockPermissions: true })
+            .catch(err => {
+                console.log(err);
+                return interaction.reply('An error occured!');
+            });
+        });
+
+        return interaction.reply('Done!');
+
+}
+
+
 module.exports = {
     closestMatchChannel,
+    resetUsedChannels,
 };
