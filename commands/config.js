@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { closestMatchChannel } = require('../utils.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,12 +16,23 @@ module.exports = {
     async execute(interaction) {
         const rawString = interaction.options.getString('rolename');
 
-        const array = rawString.replace(/ /g, '').split(',');
+        const array = rawString.split(',');
 
         let replymsg = '';
         array.forEach(element => {
             replymsg += element + '\n';
         });
+
+        const channels = Array.from(interaction.client.unusedCategory.children.values())
+            .concat(Array.from(interaction.client.usedCategory.children.values()));
+
+        for (const name of array) {
+            const res = closestMatchChannel(name, channels);
+
+            console.log(channels[res.index].name);
+            channels.splice(res.index, 1);
+            console.log(res.channel.name);
+        }
 
         await interaction.reply(`You have selected:\n${replymsg}`);
     },
