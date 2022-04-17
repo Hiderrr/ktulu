@@ -1,16 +1,18 @@
 /* eslint-disable no-unused-vars */
 const { closestMatch } = require('closest-match');
-const { GuildChannel, Interaction } = require('discord.js');
-const { client } = require('./bot.js');
+const { GuildChannel, Interaction, MessageAttachment, MessageEmbed } = require('discord.js');
+
+const sd = require('./shared_data.js');
 
 /**
+ * @description Gives you the closest match between the input and a channel name.
  * @param {string} expectedName
  * Expected channel name
  * @param {Array<GuildChannel>} candidateChannels
  * Array of channels to be considered
  * @returns
  * Channel which name is the best match with expectedName and its position in candidateChannels
- */
+*/
 
 function closestMatchChannel(name, candidateChannels) {
 
@@ -28,22 +30,42 @@ function closestMatchChannel(name, candidateChannels) {
 
 }
 
+/**
+ * @description Moves all voice channels from the 'USED' category to the 'UNUSED' category.
+ */
+
 async function resetUsedChannels() {
 
-    const usedChannels = Array.from(client.usedCategory.children.values());
+    const usedChannels = Array.from(sd.usedCategory.children.values());
         usedChannels.forEach(usedChannel => {
-            usedChannel.setParent(client.unusedCategory, { lockPermissions: true })
+            usedChannel.setParent(sd.unusedCategory, { lockPermissions: true })
             .catch(err => {
                 console.log(err);
             });
         });
-
-        console.log('Done!');
-
 }
 
+/**
+ * @description Return a embed of with an image of the card
+ * @param {String} rolename name of the role <faction>/<name> like in ./assets/ktulu/list.txt
+ * @returns Embed object
+ */
+
+function getGuideEmbed(rolename) {
+    const file = new MessageAttachment(`./assets/ktulu/jpg/${rolename}.jpg`);
+
+    const guideEmbed = new MessageEmbed()
+	.setColor('#0099ff')
+	.setTitle(`Jesteś ${rolename}!`)
+	.setDescription('Miłej Gry')
+	.setImage(`attachment://${rolename}.jpg`)
+	.setTimestamp();
+
+    return { embeds: [guideEmbed], files:[file] };
+}
 
 module.exports = {
     closestMatchChannel,
     resetUsedChannels,
+    getGuideEmbed,
 };

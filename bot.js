@@ -1,49 +1,46 @@
 const fs = require('node:fs');
-const { Client, Collection, Intents } = require('discord.js');
+const { Client, Intents } = require('discord.js');
 const { token, guildId } = require('./config.json');
+const sd = require('./shared_data.js');
 
-const client = new Client({ intents: [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES ] });
+sd.client = new Client({ intents: [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES ] });
 
-client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
-client.mainKtuluTextName = 'general';
-client.mainKtuluVcName = 'ktulu';
-client.usedChannels = new Array();
-client.ktuluVcMembers = new Array();
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
-	client.commands.set(command.data.name, command);
+	sd.commands.set(command.data.name, command);
 }
 
-client.once('ready', () => {
-    console.log(`Running ${client.user.tag}!`);
+sd.client.once('ready', () => {
+    console.log(`Running ${sd.client.user.tag}!`);
 
-    client.guild = client.guilds.cache.get(guildId);
-    client.mainKtuluText = client.guild.channels.cache.find(
-        channel => (channel.name == client.mainKtuluTextName && channel.type == 'GUILD_TEXT'),
+    sd.guild = sd.client.guilds.cache.get(guildId);
+
+    // Setting some useful variables
+    sd.mainKtuluText = sd.guild.channels.cache.find(
+        channel => (channel.name == sd.mainKtuluTextName && channel.type == 'GUILD_TEXT'),
     );
-    client.mainKtuluVc = client.guild.channels.cache.find(
-        channel => (channel.name == client.mainKtuluVcName && channel.type == 'GUILD_VOICE'),
+    sd.mainKtuluVc = sd.guild.channels.cache.find(
+        channel => (channel.name == sd.mainKtuluVcName && channel.type == 'GUILD_VOICE'),
     );
-    client.usedCategory = client.guild.channels.cache.find(
+    sd.usedCategory = sd.guild.channels.cache.find(
         channel => (channel.name == 'USED' && channel.type == 'GUILD_CATEGORY'),
     );
-    client.unusedCategory = client.guild.channels.cache.find(
+    sd.unusedCategory = sd.guild.channels.cache.find(
         channel => (channel.name == 'UNUSED' && channel.type == 'GUILD_CATEGORY'),
     );
 });
 
-client.on('interactionCreate', async interaction => {
+sd.client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
-    if (interaction.channel != client.mainKtuluText) {
-        interaction.reply(`You can only use this command in #${client.mainKtuluTextName}!`);
+    if (interaction.channel != sd.mainKtuluText) {
+        interaction.reply(`You can only use this command in #${sd.mainKtuluTextName}!`);
         return;
     }
 
-	const command = client.commands.get(interaction.commandName);
+	const command = sd.commands.get(interaction.commandName);
 
 	if (!command) return;
 
@@ -57,8 +54,4 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
-client.login(token);
-
-module.exports = {
-    client,
-};
+sd.client.login(token);
