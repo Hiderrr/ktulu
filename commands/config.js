@@ -11,7 +11,7 @@ module.exports = {
 			.setDescription('Adds a role to the pool!')
 			.addStringOption(option =>
                 option.setName('rolename')
-                    .setDescription('Doesnt have to be exact we have a cool algo :sunglasses:')
+                    .setDescription('Seperate rolenames by comma. (ex. Herszt, Pastor)')
                     .setRequired(true))),
     async execute(interaction) {
         const rawString = interaction.options.getString('rolename');
