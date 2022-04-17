@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { closestMatchChannel } = require('../utils.js');
+const { closestMatchChannel, resetUsedChannels } = require('../utils.js');
+const { client } = require('../bot.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,24 +15,23 @@ module.exports = {
                     .setDescription('Seperate rolenames by comma. (ex. Herszt, Pastor)')
                     .setRequired(true))),
     async execute(interaction) {
+        resetUsedChannels(interaction);
+
         const rawString = interaction.options.getString('rolename');
 
         const array = rawString.split(',');
 
-        let replymsg = '';
-        array.forEach(element => {
-            replymsg += element + '\n';
-        });
+        const channels = Array.from(client.unusedCategory.children.values())
+            .concat(Array.from(client.usedCategory.children.values()));
 
-        const channels = Array.from(interaction.client.unusedCategory.children.values())
-            .concat(Array.from(interaction.client.usedCategory.children.values()));
+        let replymsg = '';
 
         for (const name of array) {
             const res = closestMatchChannel(name, channels);
 
-            console.log(channels[res.index].name);
+            console.log(name + ' -> ' + res.channel.name);
             channels.splice(res.index, 1);
-            console.log(res.channel.name);
+            replymsg += res.channel.name + '\n';
         }
 
         await interaction.reply(`You have selected:\n${replymsg}`);
