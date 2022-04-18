@@ -17,13 +17,13 @@ module.exports = {
     async execute(interaction) {
 
         await resetUsedChannels(interaction);
-        const rawString = interaction.options.getString('rolename');
+        const rawString = interaction.options.getString('rolenames');
 
-        // Split by ',' and erase any empty entries.
-        // Entries that are more than one space will get through,
-        // but it's fine because this system is designed to spellcheck not predict
-        // and pretty much no human will ever type in only two spaces unless you're a moron.
-        const array = rawString.split(',').filter(word => word != '' && word != ' ');
+        const array = rawString.split(',').map(roleName => roleName.trim()).filter(roleName => roleName != '');
+
+        if (array.length === 0) {
+            return interaction.reply({ content: 'Specify at least one role u dummy!', ephemeral: true });
+        }
 
         const channels = Array.from(sd.unusedCategory.children.values())
             .concat(Array.from(sd.usedCategory.children.values()));
@@ -41,7 +41,7 @@ module.exports = {
             replymsg += name + ' -> ' + res.channel.name + '\n';
         }
 
-        interaction.reply(`You have selected:\n${replymsg}`);
+        return interaction.reply({ content: `Matched roles:\n${replymsg}`, ephemeral: true });
 
     },
 };
