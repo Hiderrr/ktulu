@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { getGuideEmbed } = require('../utils.js');
+const { getGuideEmbed } = require('../ktulu-utils');
 
 module.exports = {
     data: new SlashCommandBuilder()

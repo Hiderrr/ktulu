@@ -35,10 +35,13 @@ module.exports = {
 
             // Initial entry -> closest Match
             if (sd.logNonErrors) console.log(name + ' -> ' + res.channel.name);
+            res.channel.setParent(sd.usedCategory, { lockPermissions: true });
+            // making sure channel isn't going to be matched more than once
             channels.splice(res.index, 1);
             replymsg += res.channel.name + '\n';
         }
 
         await interaction.reply(`You have selected:\n${replymsg}`);
+
     },
 };

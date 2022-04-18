@@ -17,7 +17,7 @@ sd.client.once('ready', () => {
 
     sd.guild = sd.client.guilds.cache.get(guildId);
 
-    // Setting some useful variables
+    // Setting some useful references
     sd.mainKtuluText = sd.guild.channels.cache.find(
         channel => (channel.name == sd.mainKtuluTextName && channel.type == 'GUILD_TEXT'),
     );
