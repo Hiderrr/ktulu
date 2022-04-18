@@ -6,12 +6,20 @@ module.exports = {
     .setName('get-guide')
     .setDescription('Gives you the guide for your role!')
     .addStringOption(option =>
+        option.setName('game')
+            .setDescription('which game?')
+            .addChoice('ktulu', 'ktulu')
+            .addChoice('mafia', 'mafia')
+            .setRequired(true))
+    .addStringOption(option =>
         option.setName('rolename')
-                .setDescription('siema')
-                .setRequired(true)),
+            .setDescription('siema')
+            .setRequired(true)),
     async execute(interaction) {
-        const rawString = interaction.options.getString('rolename');
-        const data = getGuideEmbed(rawString);
-        await interaction.user.send(data);
+        const gameName = interaction.options.getString('game');
+        const roleName = interaction.options.getString('rolename');
+        const data = getGuideEmbed(gameName, roleName);
+        await interaction.reply({ content: 'check your DM! :smirk:', ephemeral: true });
+        interaction.user.send(data);
     },
 };

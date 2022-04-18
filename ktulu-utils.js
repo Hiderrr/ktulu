@@ -1,22 +1,28 @@
 const { MessageAttachment, MessageEmbed } = require('discord.js');
+const { closestMatch } = require('closest-match');
+const fs = require('node:fs');
 
 /**
  * @description Returns an embed with the image of the role's card
- * @param {String} rolename name of the role <snake_case_faction>_<snake_case_name> like in ./assets/ktulu/list.txt
+ * @param {String} gameName name of the game
+ * @param {String} roleName name of the role like in ./assets/ktulu/list.txt
  * @returns Embed object
  */
 
- function getGuideEmbed(rolename) {
-    const file = new MessageAttachment(`./assets/ktulu/jpg/${rolename}.jpg`);
+ function getGuideEmbed(gameName, roleName) {
+
+	const files = fs.readdirSync(`./assets/${gameName}/jpg`).filter(file => file.endsWith('.jpg'));
+	const bestMatch = closestMatch(roleName, files);
+    const imageAttachment = new MessageAttachment(`./assets/${gameName}/jpg/${bestMatch}`);
 
     const guideEmbed = new MessageEmbed()
 	.setColor('#0099ff')
-	.setTitle(`Jesteś ${rolename}!`)
-	.setDescription('Miłej Gry')
-	.setImage(`attachment://${rolename}.jpg`)
+	.setTitle('Znaleziona rola:')
+	.setDescription('Miłej lektury (=')
+	.setImage(`attachment://${bestMatch}`)
 	.setTimestamp();
 
-    return { embeds: [guideEmbed], files:[file] };
+    return { embeds: [guideEmbed], files:[imageAttachment] };
 }
 
 module.exports = {

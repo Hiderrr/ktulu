@@ -8,15 +8,15 @@ module.exports = {
 	.setDescription('Configures the bot!')
     .addSubcommand(subcommand =>
 		subcommand
-			.setName('add')
-			.setDescription('Adds a role to the pool!')
+			.setName('roles')
+			.setDescription('Sets the role pool!')
 			.addStringOption(option =>
-                option.setName('rolename')
+                option.setName('rolenames')
                     .setDescription('Seperate rolenames by a comma. (ex. Herszt, Pastor)')
                     .setRequired(true))),
     async execute(interaction) {
-        resetUsedChannels(interaction);
 
+        await resetUsedChannels(interaction);
         const rawString = interaction.options.getString('rolename');
 
         // Split by ',' and erase any empty entries.
@@ -38,10 +38,10 @@ module.exports = {
             res.channel.setParent(sd.usedCategory, { lockPermissions: true });
             // making sure channel isn't going to be matched more than once
             channels.splice(res.index, 1);
-            replymsg += res.channel.name + '\n';
+            replymsg += name + ' -> ' + res.channel.name + '\n';
         }
 
-        await interaction.reply(`You have selected:\n${replymsg}`);
+        interaction.reply(`You have selected:\n${replymsg}`);
 
     },
 };
