@@ -1,4 +1,4 @@
-# Ktulu
+# [Ktulu](https://21wdw-2014.staszic.waw.pl/ktulu/)
 
 - A bot for managing 'Ktulu' game using discord voice channels.
 
